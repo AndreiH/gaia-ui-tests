@@ -241,6 +241,9 @@ class GaiaData(object):
 
 
 class GaiaDevice(object):
+    import mozdevice
+
+    dm = mozdevice.DeviceManagerADB()
 
     def __init__(self, marionette):
         self.marionette = marionette
@@ -286,6 +289,7 @@ class GaiaDevice(object):
 
     def restart_b2g(self):
         self.stop_b2g()
+        self.dm.removeDir('/data/local/indexedDB/*')
         time.sleep(2)
         self.start_b2g()
 
@@ -368,7 +372,7 @@ class GaiaTestCase(MarionetteTestCase):
         self.data_layer.set_setting('ril.radio.disabled', False)
 
         # disable carrier data connection
-        self.data_layer.disable_cell_data()
+        # self.data_layer.disable_cell_data()
 
         if self.wifi:
             # forget any known networks
