@@ -15,6 +15,8 @@ class Marketplace(Base):
     _loading_fragment_locator = ('css selector', 'div.loading-fragment')
     _error_title_locator = ('css selector', 'div.modal-dialog-message-container > h3.title')
     _error_message_locator = ('css selector', 'div.modal-dialog-message-container .message')
+    _settings_button_locator = ('css selector', 'a.header-button.settings')
+    _sign_in_button_locator = ('css selector', 'a.button.browserid')
 
     # Marketplace search on home page
     _search_locator = ('id', 'search-q')
@@ -48,3 +50,11 @@ class Marketplace(Base):
         search_box.send_keys(Keys.RETURN)
         from gaiatest.apps.marketplace.regions.search_results import SearchResults
         return SearchResults(self.marionette)
+
+    def wait_for_setting_displayed(self):
+        self.wait_for_element_displayed(*self._settings_button_locator)
+
+    def tap_settings(self):
+        self.marionette.tap(self.marionette.find_element(*self._settings_button_locator))
+        from gaiatest.apps.marketplace.regions.settings import Settings
+        return Settings(self.marionette)
