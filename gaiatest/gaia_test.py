@@ -15,6 +15,7 @@ from marionette import MarionetteTouchMixin
 from marionette.errors import NoSuchElementException
 from marionette.errors import ElementNotVisibleException
 from marionette.errors import TimeoutException
+from marionette.errors import StaleElementException
 import mozdevice
 
 
@@ -172,7 +173,9 @@ class GaiaData(object):
         assert result, "Unable to change setting with name '%s' to '%s'" % (name, value)
 
     def set_volume(self, value):
-        self.set_setting('audio.volume.master', value)
+        channels = ['master', 'content', 'notification', 'alarm', 'telephony', 'bt_sco']
+        for channel in channels:
+            self.set_setting('audio.volume.%s' % channel, value)
 
     def bt_enable_bluetooth(self):
         self.marionette.switch_to_frame()
@@ -584,7 +587,7 @@ class GaiaTestCase(MarionetteTestCase):
             try:
                 if self.marionette.find_element(by, locator).is_displayed():
                     break
-            except NoSuchElementException:
+            except (NoSuchElementException, StaleElementException):
                 pass
         else:
             raise TimeoutException(
@@ -598,6 +601,8 @@ class GaiaTestCase(MarionetteTestCase):
             try:
                 if not self.marionette.find_element(by, locator).is_displayed():
                     break
+            except StaleElementException:
+                pass
             except NoSuchElementException:
                 break
         else:
@@ -614,7 +619,7 @@ class GaiaTestCase(MarionetteTestCase):
                 value = method(self.marionette)
                 if value:
                     return value
-            except NoSuchElementException:
+            except (NoSuchElementException, StaleElementException):
                 pass
             time.sleep(0.5)
         else:
