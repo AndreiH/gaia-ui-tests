@@ -16,6 +16,10 @@ class AddReview(Base):
     _submit_review_button_locator = ('css selector', '.two-up > button')
     _review_box_locator = ('css selector', '.add-review-form.form-modal')
 
+    def __init__(self, marionette):
+        Base.__init__(self, marionette)
+        self.marionette.switch_to_frame()
+        self.wait_for_element_present(*self._review_box_locator)
 
     def set_review_rating(self, rating):
         self.marionette.find_element(self._star_rating_locator[0],
@@ -26,8 +30,8 @@ class AddReview(Base):
         self.marionette.find_element(*self._add_review_input_field_locator).send_keys(text)
 
     def write_a_review(self, rating, body):
-        self.enter_review_with_text(body)
         self.set_review_rating(rating)
+        self.enter_review_with_text(body)
         self.marionette.find_element(*self._submit_review_button_locator).click()
         from gaiatest.apps.marketplace.regions.reviews import Reviews
         return Reviews(self.marionette)

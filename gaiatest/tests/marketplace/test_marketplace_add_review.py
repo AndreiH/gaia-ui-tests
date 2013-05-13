@@ -25,7 +25,6 @@ class TestAddReview(GaiaTestCase):
         details_page = results.search_results[0].tap_app()
 
         #self.assertTrue(details_page.is_review_details_visible)
-        self.marionette.switch_to_frame()
         details_page.tap_write_review()
        # persona.login(self.testvars['marketplace']['username'], self.testvars['marketplace']['password'])
         review_box = AddReview(self.marionette)
