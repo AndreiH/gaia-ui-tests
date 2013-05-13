@@ -7,9 +7,8 @@ from gaiatest.apps.base import Base
 
 class Details(Base):
 
-    _write_review_locator = ('id', 'add-first-review')
+    _write_review_locator = ('id', 'add-review')
     _review_details_locator = ('id', 'reviews-detail')
-    _write_review_button_loading_locator = ('css selector', '.button.loading-submit')
 
     @property
     def is_review_details_visible(self):
@@ -19,7 +18,6 @@ class Details(Base):
         self.wait_for_element_present(*self._write_review_locator)
         write_review_button = self.marionette.find_element(*self._write_review_locator)
         self.marionette.execute_script("arguments[0].scrollIntoView(false);", [write_review_button])
-        # TODO: click works but not tap
-        self.marionette.find_element(*self._write_review_locator).click()
+        self.marionette.tap(write_review_button)
         from gaiatest.apps.persona.app import Persona
         return Persona(self.marionette)

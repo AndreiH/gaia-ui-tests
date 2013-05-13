@@ -9,7 +9,7 @@ from gaiatest.apps.base import PageRegion
 class SearchResults(Base):
 
     _search_results_area_locator = ('id', 'search-results')
-    _search_result_locator = ('css selector', '#search-results li.item')
+    _search_result_locator = ('css selector', '#search-results ol li:not(:last-child)')
     _filter_button_locator = ('css selector', '#site-header .header-button.filter')
 
     def __init__(self, marionette):
@@ -22,6 +22,7 @@ class SearchResults(Base):
 
     @property
     def search_results(self):
+        self.wait_for_element_displayed(*self._search_result_locator)
         search_results = self.marionette.find_elements(*self._search_result_locator)
         return [self.Result(self.marionette, result) for result in search_results]
 
