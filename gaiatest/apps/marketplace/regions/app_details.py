@@ -19,5 +19,3 @@ class Details(Base):
         write_review_button = self.marionette.find_element(*self._write_review_locator)
         self.marionette.execute_script("arguments[0].scrollIntoView(false);", [write_review_button])
         self.marionette.tap(write_review_button)
-        from gaiatest.apps.persona.app import Persona
-        return Persona(self.marionette)

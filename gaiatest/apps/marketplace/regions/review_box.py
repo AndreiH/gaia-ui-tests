@@ -11,22 +11,19 @@ class AddReview(Base):
     Page for adding reviews.
     """
 
-    _star_rating_locator = ('css selector', '.ratingwidget.stars > label')
+    _star_rating_locator = ('css selector', '.ratingwidget.stars.stars-0.large>label')
     _add_review_input_field_locator = ('id', 'id_body')
     _submit_review_button_locator = ('css selector', '.two-up > button')
     _review_box_locator = ('css selector', '.add-review-form.form-modal')
 
     def __init__(self, marionette):
         Base.__init__(self, marionette)
-        self.marionette.switch_to_frame()
         self.wait_for_element_present(*self._review_box_locator)
 
     def set_review_rating(self, rating):
-        self.marionette.find_element(self._star_rating_locator[0],
-                                             '%s[data-stars="%s"]' % (self._star_rating_locator[1], rating)).click()
+        self.marionette.tap(self.marionette.find_element('css selector',  ".ratingwidget.stars.stars-0.large>label[data-stars='1']"))
 
     def enter_review_with_text(self, text):
-        self.marionette.find_element(*self._add_review_input_field_locator).clear()
         self.marionette.find_element(*self._add_review_input_field_locator).send_keys(text)
 
     def write_a_review(self, rating, body):
