@@ -8,11 +8,20 @@ from gaiatest.apps.base import Base
 class Details(Base):
 
     _write_review_locator = ('id', 'add-review')
-    _review_details_locator = ('id', 'reviews-detail')
+    _app_details_locator = ('css selector', '.detail')
+    _success_notification_locator = ('id', 'notification-content')
 
     @property
-    def is_review_details_visible(self):
-        return self.is_element_displayed(*self._review_details_locator)
+    def is_app_details_displayed(self):
+        return self.is_element_displayed(*self._app_details_locator)
+
+    @property
+    def is_success_message_displayed(self):
+        return self.is_element_displayed(*self._success_notification_locator)
+
+    @property
+    def success_message(self):
+        return self.marionette.find_element(*self._success_notification_locator).text
 
     def tap_write_review(self):
         self.wait_for_element_present(*self._write_review_locator)
