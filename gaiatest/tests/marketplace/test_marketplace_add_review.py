@@ -30,17 +30,17 @@ class TestAddReview(GaiaTestCase):
         marketplace.launch()
         settings.wait_for_sign_out_button()
 
-        results = marketplace.search('Twitter')
+        results = marketplace.search('SoundCloud')
         self.assertGreater(len(results.search_results), 0, 'No results found.')
         details_page = results.search_results[0].tap_app()
 
         self.assertTrue(details_page.is_app_details_displayed)
         details_page.tap_write_review()
         review_box = AddReview(self.marionette)
-        review_box.write_a_review(['rating'], ['This is a test'])
+        review_box.write_a_review(['rating'], ['body'])
 
         self.marionette.switch_to_frame()
         marketplace.launch()
 
-        self.assertTrue(details_page.is_success_message_displayed, "Review not added: %s" % details_page.success_message)
-        self.assertEqual(details_page.success_message, "Your review was posted")
+        self.assertTrue(marketplace.is_notification_message_displayed, "Review not added: %s" % marketplace.notification_message)
+        self.assertEqual(marketplace.notification_message, "Your review was posted")

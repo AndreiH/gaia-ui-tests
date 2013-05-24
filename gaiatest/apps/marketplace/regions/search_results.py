@@ -23,7 +23,7 @@ class SearchResults(Base):
 
     @property
     def search_results(self):
-        self.wait_for_element_displayed(*self._search_result_locator)
+        #self.wait_for_element_displayed(*self._search_result_locator)
         search_results = self.marionette.find_elements(*self._search_result_locator)
         return [self.Result(self.marionette, result) for result in search_results]
 
@@ -55,7 +55,8 @@ class SearchResults(Base):
             return self.root_element.find_element(*self._price_locator).text
 
         def tap_app(self):
-            self.marionette.tap(self.marionette.find_element(*self._name_locator))
+            app_name = self.marionette.find_element(*self._name_locator)
+            app_name.tap()
             from gaiatest.apps.marketplace.regions.app_details import Details
             return Details(self.marionette)
 

@@ -9,22 +9,16 @@ class Details(Base):
 
     _write_review_locator = ('id', 'add-review')
     _app_details_locator = ('css selector', '.detail')
-    _success_notification_locator = ('id', 'notification-content')
+
+    def __init__(self, marionette):
+        Base.__init__(self, marionette)
+        self.wait_for_element_present(*self._app_details_locator)
 
     @property
     def is_app_details_displayed(self):
         return self.is_element_displayed(*self._app_details_locator)
 
-    @property
-    def is_success_message_displayed(self):
-        return self.is_element_displayed(*self._success_notification_locator)
-
-    @property
-    def success_message(self):
-        return self.marionette.find_element(*self._success_notification_locator).text
-
     def tap_write_review(self):
         self.wait_for_element_present(*self._write_review_locator)
         write_review_button = self.marionette.find_element(*self._write_review_locator)
-        self.marionette.execute_script("arguments[0].scrollIntoView(false);", [write_review_button])
-        self.marionette.tap(write_review_button)
+        write_review_button.tap()
