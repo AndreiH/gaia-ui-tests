@@ -60,7 +60,7 @@ class TestSettingsMediaStorage(GaiaTestCase):
 
         # Tap on 'Media storage'
         self.marionette.execute_script("arguments[0].scrollIntoView(false);", [media_storage_item])
-        self.marionette.tap(media_storage_item)
+        media_storage_item.tap()
 
         self.wait_for_element_displayed(*self._music_space_locator)
         self.wait_for_element_displayed(*self._pictures_space_locator)

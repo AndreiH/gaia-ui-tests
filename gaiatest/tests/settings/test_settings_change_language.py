@@ -28,7 +28,7 @@ class TestChangeLanguage(GaiaTestCase):
         language_item = self.marionette.find_element(*self._language_settings_locator)
 
         # Select Language
-        self.marionette.tap(language_item)
+        language_item.tap()
 
         self.wait_for_element_displayed(*self._language_section_locator)
         self.wait_for_element_displayed(*self._select_language_locator)
@@ -40,7 +40,7 @@ class TestChangeLanguage(GaiaTestCase):
 
         # Go back to Settings menu
         go_back = self.marionette.find_element(*self._back_button_locator)
-        self.marionette.tap(go_back)
+        go_back.tap()
 
         after_language_change = self.marionette.find_element(*self._settings_header_text_locator).text
 
@@ -66,6 +66,6 @@ class TestChangeLanguage(GaiaTestCase):
                 option.click()
                 break
 
-        self.marionette.tap(close_button)
+        close_button.tap()
 
         self.marionette.switch_to_frame(self.app.frame)
