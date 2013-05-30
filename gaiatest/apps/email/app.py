@@ -130,8 +130,7 @@ class ToolBar(Base):
         self.marionette.find_element(*self._edit_locator).tap()
 
     def tap_settings(self):
-        # TODO: el.tap() if not tapping settings button
-        self.marionette.find_element(*self._settings_locator).click()
+        self.marionette.find_element(*self._settings_locator).tap()
 
     @property
     def is_refresh_visible(self):
@@ -159,7 +158,8 @@ class Message(PageRegion):
 
     def tap_subject(self):
         el = self.root_element.find_element(*self._subject_locator)
+        # TODO: Remove scrollIntoView when bug #877163 is fixed
         self.marionette.execute_script("arguments[0].scrollIntoView(false);", [el])
-        self.marionette.tap(self.root_element.find_element(*self._subject_locator))
+        self.root_element.find_element(*self._subject_locator).tap()
         from gaiatest.apps.email.regions.read_email import ReadEmail
         return ReadEmail(self.marionette)
