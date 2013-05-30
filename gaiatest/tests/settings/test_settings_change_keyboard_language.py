@@ -32,6 +32,8 @@ class TestChangeKeyboardLanguage(GaiaTestCase):
         # Navigate to keyboard settings
         self.wait_for_element_displayed(*self._keyboard_settings_locator)
         keyboard_setting = self.marionette.find_element(*self._keyboard_settings_locator)
+        # TODO bug 876677 - scrollIntoView() or scrollIntoView(true) scrolls to the element next to the giving one
+        self.marionette.execute_script("arguments[0].scrollIntoView(false);", [keyboard_setting])
         keyboard_setting.tap()
 
         # Select keyboard language
