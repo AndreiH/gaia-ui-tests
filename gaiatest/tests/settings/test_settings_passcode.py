@@ -36,7 +36,7 @@ class TestSettingsPasscode(GaiaTestCase):
         # navigate to phone lock settings
         self.wait_for_element_displayed(*self._phonelock_menu_item_locator)
         phonelock_menu_item = self.marionette.find_element(*self._phonelock_menu_item_locator)
-        # TODO bug 876684 - scrollIntoView() or scrollIntoView(true) scrolls to the element next to the giving one
+        # TODO bug 878017 - remove the explicit scroll once bug is fixed
         self.marionette.execute_script("arguments[0].scrollIntoView(false);", [phonelock_menu_item])
         phonelock_menu_item.tap()
 

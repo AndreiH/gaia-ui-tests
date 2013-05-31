@@ -28,13 +28,15 @@ class TestChangeLanguage(GaiaTestCase):
         language_item = self.marionette.find_element(*self._language_settings_locator)
 
         # Select Language
+        # TODO bug 878017 - remove the explicit scroll once bug is fixed
+        self.marionette.execute_script("arguments[0].scrollIntoView(false);", [language_item])
         language_item.tap()
 
         self.wait_for_element_displayed(*self._language_section_locator)
         self.wait_for_element_displayed(*self._select_language_locator)
 
         select_box = self.marionette.find_element(*self._select_language_locator)
-        select_box.click()
+        select_box.tap()
 
         self._select(u'Deutsch')
 
