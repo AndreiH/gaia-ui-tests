@@ -2,7 +2,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+
 from gaiatest import GaiaTestCase
+from gaiatest.mocks.mock_review import MockReview
 from gaiatest.apps.marketplace.app import Marketplace
 from gaiatest.mocks.persona_test_user import PersonaTestUser
 from gaiatest.apps.marketplace.regions.review_box import AddReview
@@ -19,6 +21,8 @@ class TestAddReview(GaiaTestCase):
                                                   env={"browserid": "firefoxos.persona.org", "verifier": "marketplace-dev.allizom.org"})
 
     def test_add_review(self):
+        mock_review = MockReview()
+
         marketplace = Marketplace(self.marionette, 'Marketplace dev')
         marketplace.launch()
 
@@ -36,11 +40,14 @@ class TestAddReview(GaiaTestCase):
 
         self.assertTrue(details_page.is_app_details_displayed)
         details_page.tap_write_review()
+
         review_box = AddReview(self.marionette)
-        review_box.write_a_review(['rating'], ['body'])
+        review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
         self.marionette.switch_to_frame()
         marketplace.launch()
 
         self.assertTrue(marketplace.is_notification_message_displayed, "Review not added: %s" % marketplace.notification_message)
         self.assertEqual(marketplace.notification_message, "Your review was posted")
+        self.assertEqual(details_page.first_review_rating, mock_review['rating'])
+        self.assertEqual(details_page.first_review_body, mock_review['body'])

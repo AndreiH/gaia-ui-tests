@@ -9,6 +9,8 @@ class Details(Base):
 
     _write_review_locator = ('id', 'add-review')
     _app_details_locator = ('css selector', '.detail')
+    _first_review_locator = ('css selector', 'li:first-child .review-inner > span')
+    _first_review_body_locator = ('css selector', 'li:first-child .body')
 
     def __init__(self, marionette):
         Base.__init__(self, marionette)
@@ -17,6 +19,14 @@ class Details(Base):
     @property
     def is_app_details_displayed(self):
         return self.is_element_displayed(*self._app_details_locator)
+
+    @property
+    def first_review_body(self):
+        return self.marionette.find_element(*self._first_review_body_locator).text
+
+    @property
+    def first_review_rating(self):
+        return int(self.marionette.find_element(*self._first_review_locator).get_attribute('class')[-1])
 
     def tap_write_review(self):
         self.wait_for_element_present(*self._write_review_locator)
