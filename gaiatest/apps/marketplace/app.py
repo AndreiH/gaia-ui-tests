@@ -62,7 +62,7 @@ class Marketplace(Base):
         return SearchResults(self.marionette)
 
     def tap_settings(self):
-        self.marionette.tap(self.marionette.find_element(*self._settings_button_locator))
+        self.marionette.find_element(*self._settings_button_locator).tap()
         from gaiatest.apps.marketplace.regions.settings import Settings
         return Settings(self.marionette)
 
