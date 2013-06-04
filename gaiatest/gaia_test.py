@@ -11,7 +11,6 @@ import traceback
 
 from marionette import MarionetteTestCase
 from marionette import Marionette
-from marionette import MarionetteTouchMixin
 from marionette.errors import NoSuchElementException
 from marionette.errors import ElementNotVisibleException
 from marionette.errors import TimeoutException
@@ -82,6 +81,15 @@ class GaiaApps(object):
         if switch_to_frame:
             self.switch_to_frame(app.frame_id, url)
         return app
+
+    @property
+    def displayed_app(self):
+        self.marionette.switch_to_frame()
+        result = self.marionette.execute_async_script('return GaiaApps.displayedApp();')
+        return GaiaApp(frame=result.get('frame'),
+                       src=result.get('src'),
+                       name=result.get('name'),
+                       origin=result.get('origin'))
 
     def is_app_installed(self, app_name):
         self.marionette.switch_to_frame()
@@ -406,7 +414,6 @@ class GaiaTestCase(MarionetteTestCase):
 
     def setUp(self):
         MarionetteTestCase.setUp(self)
-        self.marionette.__class__ = type('Marionette', (Marionette, MarionetteTouchMixin), {})
 
         self.device = GaiaDevice(self.marionette)
         if self.restart and (self.device.is_android_build or self.marionette.instance):
@@ -416,8 +423,6 @@ class GaiaTestCase(MarionetteTestCase):
                 self.device.manager.removeDir('/data/local/indexedDB')
                 self.device.manager.removeDir('/data/b2g/mozilla')
             self.device.start_b2g()
-
-        self.marionette.setup_touch()
 
         # the emulator can be really slow!
         self.marionette.set_script_timeout(self._script_timeout)

@@ -73,4 +73,4 @@ class Marketplace(Base):
         self.wait_for_element_displayed(*self._signed_in_notification_locator)
 
     def tap_signed_in_notification(self):
-        self.marionette.tap(self.marionette.find_element(*self._signed_in_notification_locator))
+        self.marionette.find_element(*self._signed_in_notification_locator).tap()
