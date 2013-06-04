@@ -21,7 +21,6 @@ class Marketplace(Base):
 
     # Marketplace search on home page
     _search_locator = ('id', 'search-q')
-    _signed_in_notification_locator = ('css selector', '#notification.show')
 
     def __init__(self, marionette, app_name=False):
         Base.__init__(self, marionette)
@@ -68,9 +67,3 @@ class Marketplace(Base):
 
     def wait_for_setting_displayed(self):
         self.wait_for_element_displayed(*self._settings_button_locator)
-
-    def wait_for_signed_in_notification(self):
-        self.wait_for_element_displayed(*self._signed_in_notification_locator)
-
-    def tap_signed_in_notification(self):
-        self.marionette.find_element(*self._signed_in_notification_locator).tap()

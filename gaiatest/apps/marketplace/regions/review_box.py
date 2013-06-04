@@ -2,10 +2,13 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import random
+import time
+
 from gaiatest.apps.base import Base
 
 
-class AddReview(Base):
+class AddReview(Base, dict):
     """
     Page for adding reviews.
     """
@@ -13,11 +16,23 @@ class AddReview(Base):
     _add_review_input_field_locator = ('id', 'id_body')
     _submit_review_button_locator = ('css selector', 'button[type="submit"]')
     _review_box_locator = ('css selector', '.add-review-form')
-    _rating_locator = ('css selector', ".ratingwidget.stars-0>label[data-stars='%s']")
+    _rating_locator = ('css selector', ".ratingwidget.stars-0 > label[data-stars='%s']")
 
-    def __init__(self, marionette):
+    def __init__(self, marionette, **kwargs):
         Base.__init__(self, marionette)
         self.wait_for_element_present(*self._review_box_locator)
+
+        # setting your default values for review
+        current_time = str(time.time()).split('.')[0]
+        self['rating'] = random.randint(1, 5)
+        self['body'] = 'This is a test %s' % current_time
+
+        # update with any keyword arguments passed
+        self.update(**kwargs)
+
+    # allow getting items as if they were attributes
+    def __getattr__(self, attr):
+        return self[attr]
 
     def set_review_rating(self, rating):
         self.marionette.find_element(self._rating_locator[0], self._rating_locator[1] % rating).tap()

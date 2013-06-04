@@ -23,7 +23,7 @@ class SearchResults(Base):
 
     @property
     def search_results(self):
-        #self.wait_for_element_displayed(*self._search_result_locator)
+        self.wait_for_element_displayed(*self._search_result_locator)
         search_results = self.marionette.find_elements(*self._search_result_locator)
         return [self.Result(self.marionette, result) for result in search_results]
 

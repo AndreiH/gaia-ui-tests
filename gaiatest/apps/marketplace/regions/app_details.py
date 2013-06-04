@@ -31,4 +31,7 @@ class Details(Base):
     def tap_write_review(self):
         self.wait_for_element_present(*self._write_review_locator)
         write_review_button = self.marionette.find_element(*self._write_review_locator)
+        self.marionette.execute_script("arguments[0].scrollIntoView(false);", [write_review_button])
+        # element.tap() isn't working here
+        # Bug 878750 - el.tap() and click() do not work on "Write a review" button
         write_review_button.tap()
