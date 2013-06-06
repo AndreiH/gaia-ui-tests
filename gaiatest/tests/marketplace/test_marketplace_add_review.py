@@ -6,10 +6,9 @@
 from gaiatest import GaiaTestCase
 from gaiatest.apps.marketplace.app import Marketplace
 from gaiatest.mocks.persona_test_user import PersonaTestUser
-from gaiatest.apps.marketplace.regions.review_box import AddReview
 
 
-class TestAddReview(GaiaTestCase):
+class TestMarketplaceAddReview(GaiaTestCase):
 
     def setUp(self):
         GaiaTestCase.setUp(self)
@@ -36,15 +35,11 @@ class TestAddReview(GaiaTestCase):
         self.assertGreater(len(results.search_results), 0, 'No results found.')
         details_page = results.search_results[0].tap_app()
 
-        details_page.tap_write_review()
-
-        review_box = AddReview(self.marionette)
+        review_box = details_page.tap_write_review()
         review_box.write_a_review(review_box['rating'], review_box['body'])
 
-        self.marionette.switch_to_frame()
-        marketplace.launch()
+        marketplace.wait_for_notification_message_displayed
 
-        self.assertTrue(marketplace.is_notification_message_displayed, "Review not added: %s" % marketplace.notification_message)
         self.assertEqual(marketplace.notification_message, "Your review was posted")
         self.assertEqual(details_page.first_review_rating, review_box['rating'])
         self.assertEqual(details_page.first_review_body, review_box['body'])

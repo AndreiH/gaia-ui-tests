@@ -44,8 +44,8 @@ class Marketplace(Base):
         return self.marionette.find_element(*self._error_message_locator).text
 
     @property
-    def is_notification_message_displayed(self):
-        return self.is_element_displayed(*self._notification_locator)
+    def wait_for_notification_message_displayed(self):
+        return self.wait_for_element_displayed(*self._notification_locator)
 
     @property
     def notification_message(self):
