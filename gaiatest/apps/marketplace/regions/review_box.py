@@ -22,18 +22,6 @@ class AddReview(Base, dict):
         Base.__init__(self, marionette)
         self.wait_for_element_present(*self._review_box_locator)
 
-        # setting your default values for review
-        current_time = str(time.time()).split('.')[0]
-        self['rating'] = random.randint(1, 5)
-        self['body'] = 'This is a test %s' % current_time
-
-        # update with any keyword arguments passed
-        self.update(**kwargs)
-
-    # allow getting items as if they were attributes
-    def __getattr__(self, attr):
-        return self[attr]
-
     def set_review_rating(self, rating):
         self.marionette.find_element(self._rating_locator[0], self._rating_locator[1] % rating).tap()
 
